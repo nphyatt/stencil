@@ -141,6 +141,14 @@ const updateComponent = async (hostRef: d.HostRef, instance: any, isInitialLoad:
 let renderingRef: any = null;
 
 const callRender = (hostRef: d.HostRef, instance: any, elm: HTMLElement) => {
+  const hostEl = hostRef.$hostElement$;
+  if (hostEl && hostEl.textContent && hostEl['s-cr'] && !hostEl['s-cr'].parentNode) {
+    const contRef = hostEl['s-cr'];
+    // @ts-ignore
+    if (contRef && !contRef.parentNode && contRef['s-ogelm']) {
+      hostEl.insertBefore(contRef, hostEl.firstChild);
+    }
+  }
   // in order for bundlers to correctly treeshake the BUILD object
   // we need to ensure BUILD is not deoptimized within a try/catch
   // https://rollupjs.org/guide/en/#treeshake tryCatchDeoptimization
